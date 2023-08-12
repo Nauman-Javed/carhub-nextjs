@@ -20,7 +20,7 @@ export const Navbar = () => {
         <CustomButton
           title="Sign in"
           btnType="button"
-          styles="text-primary-blue rounded-full text-white bg-white min-w-[130px]"
+          styles="text-primary-blue rounded-full bg-white min-w-[130px]"
           handleClick={ClickHandler}
         />
       </nav>
