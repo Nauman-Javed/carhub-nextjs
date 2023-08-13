@@ -32,3 +32,7 @@ export interface CarProps {
   transmission: string;
   year: number;
 }
+
+export interface CustomSearchProps {
+  styles: string;
+}
