@@ -14,8 +14,8 @@ export const SearchBar = () => {
     if (manufacturer === "" && model === " ") {
       return alert("Please fill in the search bar");
     } else {
+      updateSearchparams(model.toLowerCase(), manufacturer.toLowerCase());
     }
-    updateSearchparams(model.toLowerCase(), manufacturer.toLowerCase());
   };
 
   const updateSearchparams = (model: string, manufacturer: string) => {

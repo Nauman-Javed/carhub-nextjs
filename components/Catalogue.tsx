@@ -3,14 +3,20 @@ import { CarCard, SearchBar } from ".";
 import { CustomFilter } from "@/collections";
 import { fetchCars } from "@/utils";
 
-export const Catalogue = () => {
+export const Catalogue = ({ serachParams }) => {
   const [cars, setCars] = useState([]);
   const [isArrayEmpty, setIsArrayEmpty] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const allCars = await fetchCars();
+        const allCars = await fetchCars({
+          manufacturer: serachParams.manufacturer || "",
+          year: serachParams.year || "2022",
+          fuel: serachParams.fuel || "",
+          limit: serachParams.limit || 10,
+          model: serachParams.model || "",
+        });
         setCars(allCars);
         console.log(cars);
 
