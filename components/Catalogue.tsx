@@ -1,32 +1,46 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { CarCard, SearchBar } from ".";
 import { CustomFilter } from "@/collections";
 import { fetchCars } from "@/utils";
+import { fuels, yearsOfProduction } from "@/constants";
+import Image from "next/image";
 
-export const Catalogue = ({ serachParams }) => {
-  const [cars, setCars] = useState([]);
-  const [isArrayEmpty, setIsArrayEmpty] = useState(true);
+export const Catalogue = () => {
+  const [allCars, setAllCars] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [manufacturer, setManufacturer] = useState("");
+  const [model, setModel] = useState("");
+
+  const [fuel, setFuel] = useState("");
+  const [year, setYear] = useState(2022);
+
+  const [limit, setLimit] = useState(10);
+
+  const getCars = async () => {
+    setLoading(true);
+    try {
+      const result = await fetchCars({
+        manufacturer: manufacturer || "",
+        year: year || 2022,
+        fuel: fuel || "",
+        limit: limit || 10,
+        model: model || "",
+      });
+
+      setAllCars(result);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const allCars = await fetchCars({
-          manufacturer: serachParams.manufacturer || "",
-          year: serachParams.year || "2022",
-          fuel: serachParams.fuel || "",
-          limit: serachParams.limit || 10,
-          model: serachParams.model || "",
-        });
-        setCars(allCars);
-        console.log(cars);
-
-        setIsArrayEmpty(!Array.isArray(allCars) || allCars.length < 1);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, []);
+    getCars();
+  }, [manufacturer, model, fuel, year]);
 
   return (
     <div className="mt-12 padding-x padding-y max-width" id="discover">
@@ -35,17 +49,35 @@ export const Catalogue = ({ serachParams }) => {
         <p>Explore the cars you might like</p>
       </div>
       <div className="home__filters">
-        <SearchBar />
-        <div className="home__filter_container">
-          <CustomFilter title="fuel" />
-          <CustomFilter title="year" />
+        <SearchBar setManufacturer={setManufacturer} setModel={setModel} />
+        <div className="home__filter-container">
+          <CustomFilter title="fuel" options={fuels} setFilter={setFuel} />
+          <CustomFilter
+            title="year"
+            options={yearsOfProduction}
+            setFilter={setYear}
+          />
         </div>
       </div>
-      {!isArrayEmpty ? (
-        <section className="home__cars-wrapper">
-          {cars.map((car) => {
-            return <CarCard key={car} car={car} />;
-          })}
+      {allCars.length > 0 ? (
+        <section>
+          <div className="home__cars-wrapper">
+            {allCars.map((car) => {
+              return <CarCard key={car} car={car} />;
+            })}
+          </div>
+
+          {loading && (
+            <div className="mt-16 w-full flex items-center">
+              <Image
+                src="/loader.svg"
+                alt="loader"
+                width={50}
+                height={50}
+                className="object-contain"
+              />
+            </div>
+          )}
         </section>
       ) : (
         <div className="home__error-container">
