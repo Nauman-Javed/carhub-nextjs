@@ -51,11 +51,16 @@ export const Catalogue = () => {
       <div className="home__filters">
         <SearchBar setManufacturer={setManufacturer} setModel={setModel} />
         <div className="home__filter-container">
-          <CustomFilter title="fuel" options={fuels} setFilter={setFuel} />
+          <CustomFilter
+            title="fuel"
+            options={fuels}
+            setFilter={() => setFuel}
+          />
+
           <CustomFilter
             title="year"
             options={yearsOfProduction}
-            setFilter={setYear}
+            setFilter={() => setYear}
           />
         </div>
       </div>

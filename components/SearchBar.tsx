@@ -15,8 +15,8 @@ export const SearchBar = ({ setManufacturer, setModel }: SearchBarProps) => {
     if (searchManufacturer === "" && searchModel === " ") {
       return alert("Please fill in the search bar");
     } else {
-      setModel(searchModel);
-      setManufacturer(searchManufacturer);
+      setModel && setModel(searchModel);
+      setManufacturer && setManufacturer(searchManufacturer);
     }
   };
 
